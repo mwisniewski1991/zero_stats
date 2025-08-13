@@ -1,0 +1,223 @@
+/* Custom styles for YouTube Statistics Dashboard - Dark Theme */
+
+body {
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: #e0e0e0 !important;
+}
+
+.navbar {
+    background-color: #2d2d2d !important;
+}
+
+.navbar-nav .nav-link {
+    color: #e0e0e0 !important;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #69b3a2 !important;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.3);
+    border-radius: 0.5rem;
+    background-color: #2d2d2d;
+    color: #e0e0e0;
+}
+
+.card-header {
+    background-color: #3d3d3d;
+    border-bottom: 1px solid #4d4d4d;
+    border-radius: 0.5rem 0.5rem 0 0 !important;
+    color: #e0e0e0;
+}
+
+.chart-container {
+    min-height: 300px;
+    background-color: #2d2d2d;
+    border-radius: 0.25rem;
+    padding: 1rem;
+}
+
+.playlist-stats {
+    background-color: #3d3d3d;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    color: #e0e0e0;
+}
+
+.list-group-item {
+    border-left: none;
+    border-right: none;
+    border-radius: 0 !important;
+    background-color: #2d2d2d;
+    border-color: #4d4d4d;
+    color: #e0e0e0;
+}
+
+.list-group-item:first-child {
+    border-top: none;
+}
+
+.list-group-item:last-child {
+    border-bottom: none;
+}
+
+.badge {
+    font-size: 0.875em;
+}
+
+.table {
+    color: #e0e0e0;
+}
+
+.table th {
+    border-top: none;
+    font-weight: 600;
+    border-color: #4d4d4d;
+}
+
+.table td {
+    vertical-align: middle;
+    border-color: #4d4d4d;
+}
+
+.alert-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: #fff;
+}
+
+.alert-info {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+    color: #fff;
+}
+
+/* D3.js chart styles */
+.tooltip {
+    font-size: 12px;
+    font-weight: bold;
+    fill: #e0e0e0;
+}
+
+/* Tooltip box */
+.chart-tooltip {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    pointer-events: none;
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+    border: 1px solid #4d4d4d;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .chart-container {
+        min-height: 300px;
+    }
+    
+    .display-4 {
+        font-size: 2rem;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+}
+
+/* Animation for cards */
+.card {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.4);
+}
+
+/* Custom colors for statistics */
+.text-primary {
+    color: #4fc3f7 !important;
+}
+
+.text-success {
+    color: #81c784 !important;
+}
+
+.text-info {
+    color: #4dd0e1 !important;
+}
+
+.text-warning {
+    color: #ffb74d !important;
+}
+
+.text-muted {
+    color: #9e9e9e !important;
+}
+
+/* Loading spinner */
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #4d4d4d;
+    border-top: 3px solid #69b3a2;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.card-link-tile {
+    cursor: pointer;
+    transition: box-shadow 0.2s, background 0.2s;
+    background-color: #2d2d2d;
+}
+
+.card-link-tile:hover, .card-link-tile:focus {
+    box-shadow: 0 0.5rem 1.5rem rgba(105, 179, 162, 0.2);
+    background: #3d3d3d;
+    text-decoration: none;
+}
+
+.card-link-tile .card-title, .card-link-tile .card-text {
+    color: #e0e0e0;
+}
+
+.card-link-tile:active {
+    background: #1a1a1a;
+}
+
+/* Additional dark theme elements */
+h1, h2, h3, h4, h5, h6 {
+    color: #e0e0e0;
+}
+
+.lead {
+    color: #b0b0b0;
+}
+
+.btn-primary {
+    background-color: #69b3a2;
+    border-color: #69b3a2;
+}
+
+.btn-primary:hover {
+    background-color: #5a9d8a;
+    border-color: #5a9d8a;
+} 

@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+
+{% block title %}Top Playlisty - YouTube Statistics{% endblock %}
+
+{% block extra_head %}
+<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+<style>
+/* Dostosowanie DataTables do ciemnego motywu */
+.dataTables_wrapper {
+    color: #e0e0e0 !important;
+}
+
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_paginate {
+    color: #e0e0e0 !important;
+}
+
+.dataTables_wrapper .dataTables_filter input,
+.dataTables_wrapper .dataTables_length select {
+    background-color: #2d2d2d !important;
+    color: #e0e0e0 !important;
+    border: 1px solid #4d4d4d !important;
+    border-radius: 0.25rem;
+}
+
+.dataTables_wrapper .dataTables_filter input:focus,
+.dataTables_wrapper .dataTables_length select:focus {
+    border-color: #69b3a2 !important;
+    box-shadow: 0 0 0 0.2rem rgba(105, 179, 162, 0.25) !important;
+}
+
+.page-item .page-link {
+    background-color: #2d2d2d !important;
+    border-color: #4d4d4d !important;
+    color: #e0e0e0 !important;
+}
+
+.page-item.active .page-link {
+    background-color: #69b3a2 !important;
+    border-color: #69b3a2 !important;
+    color: #fff !important;
+}
+
+.page-item:hover .page-link {
+    background-color: #3d3d3d !important;
+    border-color: #69b3a2 !important;
+    color: #69b3a2 !important;
+}
+
+.page-item.disabled .page-link {
+    background-color: #1a1a1a !important;
+    border-color: #4d4d4d !important;
+    color: #9e9e9e !important;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="display-4 mb-4">🏆 Top Playlisty</h1>
+        <p class="lead">Ranking playlist według liczby wyświetleń</p>
+    </div>
+</div>
+
+{% if error %}
+<div class="alert alert-danger" role="alert">
+    <strong>Błąd:</strong> {{ error }}
+</div>
+{% endif %}
+
+{% if playlists %}
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title mb-0">Statystyki Playlist</h3>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover table-dark" id="top-playlists-table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Nazwa Playlisty</th>
+                        <th scope="col">Filmy</th>
+                        <th scope="col">Łączne wyświetlenia</th>
+                        <th scope="col">Łączne polubienia</th>
+                        <th scope="col">Średnio wyświetleń</th>
+                        <th scope="col">Średnio polubień</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for playlist in playlists %}
+                    <tr>
+                        <th scope="row">{{ loop.index }}</th>
+                        <td>
+                            <strong>{{ playlist.playlist_title }}</strong>
+                            <br>
+                            <small class="text-muted">{{ playlist.playlist_id[:20] }}...</small>
+                        </td>
+                        <td>
+                            <span class="badge bg-primary">{{ "{:,}".format(playlist.video_count) }}</span>
+                        </td>
+                        <td>
+                            <span class="text-success fw-bold">{{ "{:,}".format(playlist.total_views) }}</span>
+                        </td>
+                        <td>
+                            <span class="text-warning fw-bold">{{ "{:,}".format(playlist.total_likes) }}</span>
+                        </td>
+                        <td>
+                            <span class="text-info">{{ "{:,.1f}".format(playlist.avg_views) }}</span>
+                        </td>
+                        <td>
+                            <span class="text-info">{{ "{:,.1f}".format(playlist.avg_likes) }}</span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% else %}
+<div class="alert alert-info" role="alert">
+    <h4 class="alert-heading">Brak danych</h4>
+    <p>Nie znaleziono żadnych playlist w bazie danych.</p>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_scripts %}
+<!-- DataTables JS -->
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    $('#top-playlists-table').DataTable({
+        "language": {
+            "lengthMenu": "Pokaż _MENU_ wpisów",
+            "zeroRecords": "Nie znaleziono pasujących wpisów",
+            "info": "Wyświetlanie _START_ do _END_ z _TOTAL_ wpisów",
+            "infoEmpty": "Wyświetlanie 0 do 0 z 0 wpisów",
+            "infoFiltered": "(filtrowane z _MAX_ wszystkich wpisów)",
+            "search": "Szukaj:",
+            "paginate": {
+                "first": "Pierwsza",
+                "last": "Ostatnia",
+                "next": "Następna",
+                "previous": "Poprzednia"
+            }
+        },
+        "pageLength": 25,
+        "order": [[ 3, "desc" ]], // sortuj według kolumny "Łączne wyświetlenia"
+        "columnDefs": [
+            {
+                "targets": [0], // kolumna z numerem
+                "orderable": false,
+                "searchable": false
+            }
+        ],
+        "responsive": true,
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Wszystkie"]],
+        "search": {
+            "caseInsensitive": true
+        }
+    });
+});
+</script>
+{% endblock %}

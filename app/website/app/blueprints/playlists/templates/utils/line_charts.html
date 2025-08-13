@@ -1,0 +1,94 @@
+<div class="col-12">
+    <div class="mb-2">
+        <small class="text-muted">Liczba filmów: {{ playlist.videos|length }}</small>
+    </div>
+    <div id="chart-{{ playlist.id }}" class="chart-container"></div>
+</div>
+<script>
+// D3.js chart creation for playlists
+document.addEventListener('DOMContentLoaded', function() {
+    createPlaylistChart('{{ playlist.id }}', {{ playlist.videos|tojson }});
+});
+
+function createPlaylistChart(playlistId, videos) {
+    const margin = {top: 20, right: 30, bottom: 90, left: 60};
+    
+    // Get container width dynamically
+    const container = document.getElementById(`chart-${playlistId}`);
+    const containerWidth = container.offsetWidth - 32; // subtract padding
+    const width = containerWidth - margin.left - margin.right;
+    const height = 300 - margin.top - margin.bottom; // reduced from 400 to 300
+    
+    // Clear previous content
+    d3.select(`#chart-${playlistId}`).html('');
+    
+    // Create tooltip div
+    const tooltip = d3.select("body").append("div")
+        .attr("class", "chart-tooltip")
+        .style("opacity", 0);
+    
+    const svg = d3.select(`#chart-${playlistId}`)
+        .append("svg")
+        .attr("width", width + margin.right + margin.left)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
+    
+    // X axis
+    const x = d3.scaleBand()
+        .range([0, width])
+        .domain(videos.map(d => d.video_id))
+        .padding(0.2);
+    
+    // Usuwam etykiety z osi X
+    svg.append("g")
+        .attr("transform", `translate(0,${height})`)
+        .call(d3.axisBottom(x).tickFormat('').tickSize(0));
+    
+    // Y axis
+    const y = d3.scaleLinear()
+        .domain([0, d3.max(videos, d => d.view_count)])
+        // .domain([0, 5000000])
+        .range([height, 0]);
+    
+    svg.append("g")
+        .call(d3.axisLeft(y).tickFormat(d3.format(",")));
+    
+    // Bars
+    svg.selectAll("mybar")
+        .data(videos)
+        .join("rect")
+        .attr("x", d => x(d.video_id))
+        .attr("y", d => y(d.view_count))
+        .attr("width", x.bandwidth())
+        .attr("height", d => height - y(d.view_count))
+        .attr("fill", "#ffffff")
+        .on("mouseover", function(event, d) {
+            d3.select(this).attr("fill", "#e0e0e0");
+            
+            tooltip.transition()
+                .duration(200)
+                .style("opacity", .9);
+            tooltip.html(`<strong>${d.title}</strong><br/>${d3.format(",")(d.view_count)} wyświetleń`)
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 28) + "px");
+        })
+        .on("mouseout", function(event, d) {
+            d3.select(this).attr("fill", "#ffffff");
+            
+            tooltip.transition()
+                .duration(500)
+                .style("opacity", 0);
+        });
+    
+    // Add title
+    svg.append("text")
+        .attr("x", width / 2)
+        .attr("y", -5)
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px")
+        .style("font-weight", "bold")
+        .text("Wyświetlenia per film")
+        .style("fill", "#e0e0e0");
+}
+</script>

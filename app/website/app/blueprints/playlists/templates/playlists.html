@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Playlisty - YouTube Statistics{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="display-4 mb-4">📈 Wykresy Playlist</h1>
+        <p class="lead">Przeglądaj statystyki dla każdej playlisty</p>
+    </div>
+</div>
+
+{% if error %}
+<div class="alert alert-danger" role="alert">
+    <strong>Błąd:</strong> {{ error }}
+</div>
+{% endif %}
+
+{% if playlists %}
+    {% for playlist_id, playlist in playlists.items() %}
+    <div class="card mb-4">
+        <div class="card-header">
+            <h3 class="card-title mb-0">{{ playlist.title }}</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                {% with playlists=playlists %}
+                    {% include 'utils/line_charts.html' %}
+                {% endwith %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+<div class="alert alert-info" role="alert">
+    <h4 class="alert-heading">Brak danych</h4>
+    <p>Nie znaleziono żadnych playlist w bazie danych.</p>
+</div>
+{% endif %}
+{% endblock %}
