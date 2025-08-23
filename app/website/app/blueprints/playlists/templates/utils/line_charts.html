@@ -11,84 +11,166 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function createPlaylistChart(playlistId, videos) {
-    const margin = {top: 20, right: 30, bottom: 90, left: 60};
+    const config = getChartConfig();
+    const dimensions = calculateDimensions(playlistId, config);
     
-    // Get container width dynamically
+    // Clear previous content and setup
+    const tooltip = createTooltip();
+    const svg = setupChart(playlistId, dimensions);
+    
+    // Create scales
+    const { xScale, yScale } = createScales(videos, dimensions);
+    
+    // Draw chart elements
+    drawAxes(svg, xScale, yScale, dimensions);
+    drawBars(svg, videos, xScale, yScale, dimensions, tooltip);
+    drawAverageLine(svg, videos, yScale, dimensions);
+    drawYAxisLabel(svg, dimensions, config);
+}
+
+function getChartConfig() {
+    return {
+        margin: {top: 15, right: 30, bottom: 40, left: 80},
+        height: 200,
+        colors: {
+            bars: "#f0302e",
+            hover: "#fff",
+            average: "#fff",
+            text: "#e0e0e0"
+        }
+    };
+}
+
+function calculateDimensions(playlistId, config) {
     const container = document.getElementById(`chart-${playlistId}`);
-    const containerWidth = container.offsetWidth - 32; // subtract padding
-    const width = containerWidth - margin.left - margin.right;
-    const height = 300 - margin.top - margin.bottom; // reduced from 400 to 300
+    const containerWidth = container.offsetWidth - 32;
+    const width = containerWidth - config.margin.left - config.margin.right;
+    const height = config.height - config.margin.top - config.margin.bottom;
     
+    return { width, height, margin: config.margin };
+}
+
+function setupChart(playlistId, dimensions) {
     // Clear previous content
     d3.select(`#chart-${playlistId}`).html('');
     
-    // Create tooltip div
-    const tooltip = d3.select("body").append("div")
+    const svg = createSVG(playlistId, dimensions);
+    
+    return svg ;
+}
+
+function createTooltip() {
+    return d3.select("body").append("div")
         .attr("class", "chart-tooltip")
         .style("opacity", 0);
-    
-    const svg = d3.select(`#chart-${playlistId}`)
+}
+
+function createSVG(playlistId, dimensions) {
+    return d3.select(`#chart-${playlistId}`)
         .append("svg")
-        .attr("width", width + margin.right + margin.left)
-        .attr("height", height + margin.top + margin.bottom)
+        .attr("width", dimensions.width + dimensions.margin.left + dimensions.margin.right)
+        .attr("height", dimensions.height + dimensions.margin.top + dimensions.margin.bottom)
         .append("g")
-        .attr("transform", `translate(${margin.left},${margin.top})`);
-    
-    // X axis
-    const x = d3.scaleBand()
-        .range([0, width])
+        .attr("transform", `translate(${dimensions.margin.left},${dimensions.margin.top})`);
+}
+
+function createScales(videos, dimensions) {
+    const xScale = d3.scaleBand()
+        .range([0, dimensions.width])
         .domain(videos.map(d => d.video_id))
         .padding(0.2);
     
-    // Usuwam etykiety z osi X
+    const yScale = d3.scaleLinear()
+        .domain([0, d3.max(videos, d => d.view_count)])
+        .range([dimensions.height, 0]);
+    
+    return { xScale, yScale };
+}
+
+function drawAxes(svg, xScale, yScale, dimensions) {
+    // X axis (without labels)
     svg.append("g")
-        .attr("transform", `translate(0,${height})`)
-        .call(d3.axisBottom(x).tickFormat('').tickSize(0));
+        .attr("transform", `translate(0,${dimensions.height})`)
+        .call(d3.axisBottom(xScale).tickFormat('').tickSize(0));
     
     // Y axis
-    const y = d3.scaleLinear()
-        .domain([0, d3.max(videos, d => d.view_count)])
-        // .domain([0, 5000000])
-        .range([height, 0]);
-    
     svg.append("g")
-        .call(d3.axisLeft(y).tickFormat(d3.format(",")));
+        .call(d3.axisLeft(yScale).tickFormat(d3.format(",")));
+}
+
+function drawBars(svg, videos, xScale, yScale, dimensions, tooltip) {
+    const config = getChartConfig();
     
-    // Bars
     svg.selectAll("mybar")
         .data(videos)
         .join("rect")
-        .attr("x", d => x(d.video_id))
-        .attr("y", d => y(d.view_count))
-        .attr("width", x.bandwidth())
-        .attr("height", d => height - y(d.view_count))
-        .attr("fill", "#ffffff")
+        .attr("x", d => xScale(d.video_id))
+        .attr("y", d => yScale(d.view_count))
+        .attr("width", xScale.bandwidth())
+        .attr("height", d => dimensions.height - yScale(d.view_count))
+        .attr("fill", config.colors.bars)
+        .attr("opacity", 0.8)
         .on("mouseover", function(event, d) {
-            d3.select(this).attr("fill", "#e0e0e0");
-            
-            tooltip.transition()
-                .duration(200)
-                .style("opacity", .9);
-            tooltip.html(`<strong>${d.title}</strong><br/>${d3.format(",")(d.view_count)} wyświetleń`)
-                .style("left", (event.pageX + 10) + "px")
-                .style("top", (event.pageY - 28) + "px");
+            handleBarHover(this, event, d, tooltip, config.colors.hover);
         })
         .on("mouseout", function(event, d) {
-            d3.select(this).attr("fill", "#ffffff");
-            
-            tooltip.transition()
-                .duration(500)
-                .style("opacity", 0);
+            handleBarMouseOut(this, tooltip, config.colors.bars);
         });
+}
+
+function handleBarHover(element, event, data, tooltip, hoverColor) {
+    d3.select(element).attr("fill", hoverColor).attr("opacity", 0.8);
     
-    // Add title
+    tooltip.transition()
+        .duration(200)
+        .style("opacity", .9);
+    tooltip.html(`<strong>${data.title}</strong><br/>${d3.format(",")(data.view_count)} wyświetleń`)
+        .style("left", (event.pageX + 10) + "px")
+        .style("top", (event.pageY - 28) + "px");
+}
+
+function handleBarMouseOut(element, tooltip, originalColor) {
+    d3.select(element).attr("fill", originalColor);
+    
+    tooltip.transition()
+        .duration(500)
+        .style("opacity", 0);
+}
+
+function drawAverageLine(svg, videos, yScale, dimensions) {
+    const config = getChartConfig();
+    const averageViews = d3.mean(videos, d => d.view_count);
+    
+    // Average line
+    svg.append("line")
+        .attr("x1", 0)
+        .attr("x2", dimensions.width)
+        .attr("y1", yScale(averageViews))
+        .attr("y2", yScale(averageViews))
+        .attr("stroke", config.colors.average)
+        .attr("stroke-width", 1)
+        .attr("stroke-dasharray", "10,10")
+        .attr("opacity", 0.8);
+    
+    // Average line label
     svg.append("text")
-        .attr("x", width / 2)
-        .attr("y", -5)
-        .attr("text-anchor", "middle")
-        .style("font-size", "16px")
-        .style("font-weight", "bold")
-        .text("Wyświetlenia per film")
-        .style("fill", "#e0e0e0");
+        .attr("x", dimensions.width - 5)
+        .attr("y", yScale(averageViews) - 5)
+        .attr("text-anchor", "end")
+        .style("font-size", "12px")
+        .style("fill", config.colors.average)
+        .text(`Średnia: ${d3.format(",")(Math.round(averageViews))}`);
+}
+
+function drawYAxisLabel(svg, dimensions, config) {
+    svg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - dimensions.margin.left + 5)
+        .attr("x", 0 - (dimensions.height / 2))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .style("font-size", "14px")
+        .style("fill", config.colors.text)
+        .text("Wyświetlenia");
 }
 </script>
