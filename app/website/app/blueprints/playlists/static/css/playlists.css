@@ -1,0 +1,16 @@
+.btn-custom-filter {
+    background-color: #f0302e;
+    border-color: #f0302e;
+    color: white;
+}
+.btn-custom-filter:hover {
+    background-color: #d02826;
+    border-color: #d02826;
+    color: white;
+}
+.btn-custom-filter:focus, .btn-custom-filter:active {
+    background-color: #d02826;
+    border-color: #d02826;
+    color: white;
+    box-shadow: 0 0 0 0.2rem rgba(240, 48, 46, 0.25);
+}

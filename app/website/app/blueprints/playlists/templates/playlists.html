@@ -2,10 +2,26 @@
 
 {% block title %}Playlisty - YouTube Statistics{% endblock %}
 
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('playlists.static', filename='css/playlists.css') }}">
+{% endblock %}
+
 {% block content %}
+
 <div class="row">
     <div class="col-12">
         <p class="lead">Przeglądaj statystyki dla każdej playlisty</p>
+    </div>
+</div>
+
+<!-- Filtr playlist -->
+<div class="row mb-4">
+    <div class="col-md-8">
+        <div class="input-group">
+            <input type="text" class="form-control" id="playlistFilter" placeholder="Wpisz nazwę playlisty...">
+            <button class="btn btn-custom-filter" type="button" id="filterBtn">Filtruj</button>
+            <button class="btn btn-outline-secondary" type="button" id="clearBtn">Wyczyść</button>
+        </div>
     </div>
 </div>
 
@@ -16,8 +32,9 @@
 {% endif %}
 
 {% if playlists %}
+    <div id="playlistsContainer">
     {% for playlist_id, playlist in playlists.items() %}
-    <div class="card mb-4">
+    <div class="card mb-4 playlist-card" data-playlist-title="{{ playlist.title|lower }}">
         <div class="card-header">
             <h3 class="card-title mb-0">{{ playlist.title }}</h3>
         </div>
@@ -30,6 +47,48 @@
         </div>
     </div>
     {% endfor %}
+    </div>
+    
+    <!-- JavaScript do filtrowania -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const filterInput = document.getElementById('playlistFilter');
+        const filterBtn = document.getElementById('filterBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const playlistCards = document.querySelectorAll('.playlist-card');
+        
+        function filterPlaylists() {
+            const searchTerm = filterInput.value.toLowerCase().trim();
+            
+            playlistCards.forEach(card => {
+                const playlistTitle = card.getAttribute('data-playlist-title');
+                if (searchTerm === '' || playlistTitle.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+        
+        function clearFilter() {
+            filterInput.value = '';
+            playlistCards.forEach(card => {
+                card.style.display = 'block';
+            });
+        }
+        
+        // Event listeners
+        filterBtn.addEventListener('click', filterPlaylists);
+        clearBtn.addEventListener('click', clearFilter);
+        
+        // Filtrowanie po naciśnięciu Enter
+        filterInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                filterPlaylists();
+            }
+        });
+    });
+    </script>
 {% else %}
 <div class="alert alert-info" role="alert">
     <h4 class="alert-heading">Brak danych</h4>
