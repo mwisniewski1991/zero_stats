@@ -8,19 +8,20 @@ body {
 .navbar-brand {
     font-weight: bold;
     font-size: 1.5rem;
-    color: #e0e0e0 !important;
+    color: #e0e0e0;
 }
 
 .navbar {
-    background-color: #2d2d2d !important;
+    background-color: #f0302e !important;
+    opacity: 0.8;
 }
 
 .navbar-nav .nav-link {
-    color: #e0e0e0 !important;
+    color: #e0e0e0;
 }
 
 .navbar-nav .nav-link:hover {
-    color: #69b3a2 !important;
+    color: #69b3a2;
 }
 
 .card {
@@ -34,14 +35,14 @@ body {
 .card-header {
     background-color: #3d3d3d;
     border-bottom: 1px solid #4d4d4d;
-    border-radius: 0.5rem 0.5rem 0 0 !important;
+    border-radius: 0.5rem 0.5rem 0 0;
     color: #e0e0e0;
 }
 
 .list-group-item {
     border-left: none;
     border-right: none;
-    border-radius: 0 !important;
+    border-radius: 0;
     background-color: #2d2d2d;
     border-color: #4d4d4d;
     color: #e0e0e0;
@@ -177,4 +178,11 @@ h1, h2, h3, h4, h5, h6 {
 .btn-primary:hover {
     background-color: #5a9d8a;
     border-color: #5a9d8a;
-} 
+}
+
+/* Footer styling */
+.footer-custom {
+    background-color: #f0302e !important;
+    opacity: 0.8;
+    color: #fff;
+}
