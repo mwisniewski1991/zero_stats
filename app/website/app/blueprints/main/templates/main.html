@@ -2,6 +2,10 @@
 
 {% block title %}Strona główna - YouTube Statistics{% endblock %}
 
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('main.static', filename='css/main.css') }}">
+{% endblock %}
+
 {% block content %}
 <div class="row">
     <div class="col-12 text-center">
@@ -10,7 +14,7 @@
 </div>
 
 
-<!-- <div class="row justify-content-center">
+<div class="row justify-content-center">
     <div class="col-md-4 mb-4">
         <a href="{{ url_for('playlists.playlists_index') }}" class="card h-100 text-decoration-none card-link-tile">
             <div class="card-body text-center">
@@ -33,5 +37,8 @@
             </div>
         </a>
     </div>
-</div> -->
+</div>
 {% endblock %} 
+
+
+
