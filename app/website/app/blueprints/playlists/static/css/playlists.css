@@ -1,16 +1,71 @@
+/* Playlists-specific styles */
+
+/* Filter button styling */
 .btn-custom-filter {
     background-color: #f0302e;
     border-color: #f0302e;
     color: white;
 }
+
 .btn-custom-filter:hover {
     background-color: #d02826;
     border-color: #d02826;
     color: white;
 }
-.btn-custom-filter:focus, .btn-custom-filter:active {
+
+.btn-custom-filter:focus, 
+.btn-custom-filter:active {
     background-color: #d02826;
     border-color: #d02826;
     color: white;
     box-shadow: 0 0 0 0.2rem rgba(240, 48, 46, 0.25);
+}
+
+/* Chart container styling */
+.chart-container {
+    min-height: 100px;
+    background-color: #2d2d2d;
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+}
+
+/* Playlist stats styling */
+.playlist-stats {
+    background-color: #3d3d3d;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    color: #e0e0e0;
+}
+
+/* D3.js chart styles */
+.tooltip {
+    font-size: 12px;
+    font-weight: bold;
+    fill: #e0e0e0;
+}
+
+/* Chart tooltip styling */
+.chart-tooltip {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    pointer-events: none;
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+    border: 1px solid #4d4d4d;
+}
+
+/* Playlist card animations */
+.playlist-card {
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* Responsive chart adjustments */
+@media (max-width: 768px) {
+    .chart-container {
+        min-height: 300px;
+    }
 }
