@@ -1,7 +1,7 @@
 /* Custom styles for YouTube Statistics Dashboard - Dark Theme */
 
 body {
-    background-color: #1a1a1a;
+    background-color: #14161d;
     color: #e0e0e0;
 }
 
@@ -39,10 +39,10 @@ body {
 }
 
 .chart-container {
-    min-height: 300px;
+    min-height: 100px;
     background-color: #2d2d2d;
     border-radius: 0.25rem;
-    padding: 1rem;
+    padding: 0.5rem;
 }
 
 .playlist-stats {
@@ -139,12 +139,9 @@ body {
 /* Animation for cards */
 .card {
     transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-}
-
-.card:hover {
-    transform: translateY(-2px);
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.4);
 }
+
 
 /* Custom colors for statistics */
 .text-primary {
