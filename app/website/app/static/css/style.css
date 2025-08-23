@@ -48,15 +48,10 @@ body {
     font-size: 0.875em;
 }
 
-
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .display-4 {
         font-size: 2rem;
-    }
-    
-    .card-body {
-        padding: 1rem;
     }
 }
 
@@ -76,25 +71,7 @@ body {
     100% { transform: rotate(360deg); }
 }
 
-.card-link-tile {
-    cursor: pointer;
-    transition: box-shadow 0.2s, background 0.2s;
-    background-color: #2d2d2d;
-}
 
-.card-link-tile:hover, .card-link-tile:focus {
-    box-shadow: 0 0.5rem 1.5rem rgba(105, 179, 162, 0.2);
-    background: #3d3d3d;
-    text-decoration: none;
-}
-
-.card-link-tile .card-title, .card-link-tile .card-text {
-    color: #e0e0e0;
-}
-
-.card-link-tile:active {
-    background: #1a1a1a;
-}
 
 /* Additional dark theme elements */
 h1, h2, h3, h4, h5, h6 {
