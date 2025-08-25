@@ -161,6 +161,7 @@ function drawAverageLine(svg, videos, yScale, dimensions) {
         .attr("text-anchor", "end")
         .style("font-size", "12px")
         .style("fill", config.colors.average)
+        .style("opacity", 0.75)
         .text(`Średnia: ${d3.format(",")(Math.round(averageViews))}`);
 }
 
