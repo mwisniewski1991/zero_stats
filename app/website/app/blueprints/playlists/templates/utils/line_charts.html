@@ -30,7 +30,7 @@ function createPlaylistChart(playlistId, videos) {
 
 function getChartConfig() {
     return {
-        margin: {top: 15, right: 30, bottom: 40, left: 80},
+        margin: {top: 15, right: 30, bottom: 40, left: 90},
         height: 200,
         colors: {
             bars: "#f0302e",
@@ -91,11 +91,13 @@ function drawAxes(svg, xScale, yScale, dimensions) {
     // X axis (without labels)
     svg.append("g")
         .attr("transform", `translate(0,${dimensions.height})`)
-        .call(d3.axisBottom(xScale).tickFormat('').tickSize(0));
+        .call(d3.axisBottom(xScale).tickFormat('').tickSize(0))
+        .style("opacity", 0.75);
     
     // Y axis
     svg.append("g")
-        .call(d3.axisLeft(yScale).tickFormat(d3.format(",")));
+        .call(d3.axisLeft(yScale).tickFormat(d3.format(",")))
+        .style("opacity", 0.75);
 }
 
 function drawBars(svg, videos, xScale, yScale, dimensions, tooltip) {
@@ -170,6 +172,7 @@ function drawYAxisLabel(svg, dimensions, config) {
         .attr("dy", "1em")
         .style("text-anchor", "middle")
         .style("font-size", "14px")
+        .style("opacity", 0.75)
         .style("fill", config.colors.text)
         .text("Wyświetlenia");
 }
