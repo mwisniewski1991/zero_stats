@@ -21,9 +21,11 @@ def create_app():
     from .blueprints.playlists.playlists import playlists
     from .blueprints.main.main import main
     from .blueprints.top_playlists.top_playlists import top_playlists
+    from .blueprints.playlists_monthly.playlists_monthly import playlists_monthly
 
     app.register_blueprint(playlists, url_prefix='/playlists')
     app.register_blueprint(main, url_prefix='/')
     app.register_blueprint(top_playlists, url_prefix='/top-playlists')
-
+    app.register_blueprint(playlists_monthly, url_prefix='/playlists-monthly')
+    
     return app
