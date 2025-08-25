@@ -108,3 +108,26 @@ def get_playlist_summary():
             return cur.fetchone()
     finally:
         conn.close() 
+
+def get_playlists_monthly_data():
+    """Get playlists data aggregated by month and year"""
+    conn = get_db_connection()
+    try:
+        with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+            schema = current_app.config['DB_SCHEMA']
+            cur.execute(f"""
+                SELECT 
+                    playlist_id,
+                    playlist_title,
+                    TO_CHAR(published_at, 'YYYY.MM') as year_month,
+                    COUNT(*) as video_count,
+                    SUM(view_count) as total_views,
+                    SUM(like_count) as total_likes
+                FROM {schema}.yt_movies
+                WHERE published_at >= '2024-01-01'
+                GROUP BY playlist_id, playlist_title, TO_CHAR(published_at, 'YYYY.MM')
+                ORDER BY playlist_title, year_month
+            """)
+            return cur.fetchall()
+    finally:
+        conn.close() 
