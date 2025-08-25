@@ -58,13 +58,12 @@ def get_top_playlists():
                 SELECT 
                     playlist_id,
                     playlist_title,
-                    COUNT(*) as video_count,
-                    SUM(view_count) as total_views,
-                    SUM(like_count) as total_likes,
-                    AVG(view_count) as avg_views,
-                    AVG(like_count) as avg_likes
-                FROM {schema}.yt_movies
-                GROUP BY playlist_id, playlist_title
+                    total_views,
+                    total_likes,
+                    total_videos,
+                    avg_views,
+                    avg_likes
+                FROM {schema}.agg_playlists_summary
                 ORDER BY total_views DESC
             """)
             return cur.fetchall()
