@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, jsonify
-from app.database import get_playlists_data, get_playlist_videos
+from app.database import get_playlists_data
 
 playlists = Blueprint('playlists', __name__, template_folder='templates', static_folder='static')
 
