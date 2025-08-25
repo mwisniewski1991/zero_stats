@@ -20,20 +20,20 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="{{ url_for('main.index') }}">📊 YouTube Stats</a>
+            <a class="navbar-brand" href="{{ url_for('main.index') }}">Strona główna</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('main.index') }}">Strona główna</a>
+                        <a class="nav-link" href="{{ url_for('playlists.playlists_index') }}">📊 Filmy w Playlistach</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('playlists.playlists_index') }}">📈 Playlisty</a>
+                        <a class="nav-link" href="{{ url_for('playlists_monthly.playlists_monthly_index') }}">📊 Playlisty Miesięczne</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('top_playlists.top_playlists_index') }}">🏆 Top Playlisty</a>
+                        <a class="nav-link" href="{{ url_for('top_playlists.top_playlists_index') }}">🏆 Ranking Playlist</a>
                     </li>
                 </ul>
             </div>
