@@ -47,26 +47,6 @@ def get_playlists_data():
     finally:
         conn.close()
 
-def get_playlist_videos(playlist_id):
-    """Get videos for a specific playlist"""
-    conn = get_db_connection()
-    try:
-        with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
-            schema = current_app.config['DB_SCHEMA']
-            cur.execute(f"""
-                SELECT 
-                    video_id,
-                    title,
-                    view_count,
-                    like_count,
-                    published_at
-                FROM {schema}.yt_movies
-                WHERE playlist_id = %s
-                ORDER BY published_at ASC
-            """, (playlist_id,))
-            return cur.fetchall()
-    finally:
-        conn.close()
 
 def get_top_playlists():
     """Get playlists ranked by total views"""
@@ -91,26 +71,10 @@ def get_top_playlists():
     finally:
         conn.close()
 
-def get_playlist_summary():
-    """Get summary statistics for all playlists"""
-    conn = get_db_connection()
-    try:
-        with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
-            schema = current_app.config['DB_SCHEMA']
-            cur.execute(f"""
-                SELECT 
-                    COUNT(DISTINCT playlist_id) as total_playlists,
-                    COUNT(*) as total_videos,
-                    SUM(view_count) as total_views,
-                    SUM(like_count) as total_likes
-                FROM {schema}.yt_movies
-            """)
-            return cur.fetchone()
-    finally:
-        conn.close() 
+
 
 def get_playlists_monthly_data():
-    """Get playlists data aggregated by month and year"""
+    """Get playlists data aggregated by month and year from agg_playlists_monthly table"""
     conn = get_db_connection()
     try:
         with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
@@ -119,13 +83,11 @@ def get_playlists_monthly_data():
                 SELECT 
                     playlist_id,
                     playlist_title,
-                    TO_CHAR(published_at, 'YYYY.MM') as year_month,
-                    COUNT(*) as video_count,
-                    SUM(view_count) as total_views,
-                    SUM(like_count) as total_likes
-                FROM {schema}.yt_movies
-                WHERE published_at >= '2024-01-01'
-                GROUP BY playlist_id, playlist_title, TO_CHAR(published_at, 'YYYY.MM')
+                    year_month,
+                    total_views,
+                    total_likes,
+                    total_videos as video_count
+                FROM {schema}.agg_playlists_monthly
                 ORDER BY playlist_title, year_month
             """)
             return cur.fetchall()
