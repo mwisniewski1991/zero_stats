@@ -1,0 +1,75 @@
+/* Chart containers */
+.chart-container {
+    background-color: #24262c;
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    margin-bottom: 20px;
+    min-height: 250px;
+}
+
+/* Tooltips */
+.chart-tooltip {
+    position: absolute;
+    text-align: center;
+    width: auto;
+    height: auto;
+    padding: 8px 12px;
+    font: 12px sans-serif;
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    border: 1px solid #4d4d4d;
+    border-radius: 4px;
+    pointer-events: none;
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+}
+
+/* Filter section */
+.btn-custom-filter {
+    background-color: #f0302e;
+    border-color: #f0302e;
+    color: white;
+}
+
+.btn-custom-filter:hover {
+    background-color: #d02826;
+    border-color: #d02826;
+    color: white;
+}
+
+.btn-custom-filter:focus, 
+.btn-custom-filter:active {
+    background-color: #d02826;
+    border-color: #d02826;
+    color: white;
+    box-shadow: 0 0 0 0.2rem rgba(240, 48, 46, 0.25);
+}
+
+/* Playlist cards */
+.playlist-card {
+    background-color: #24262c;
+    border: none;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.3);
+    border-radius: 0.5rem;
+    color: #e0e0e0;
+    margin-bottom: 2rem;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.playlist-card .card-header {
+    background-color: #24262c;
+    border-bottom: 1px solid #4d4d4d;
+    border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.playlist-card .card-title {
+    color: #e0e0e0;
+    font-weight: 600;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .chart-container {
+        min-height: 300px;
+    }
+} 
