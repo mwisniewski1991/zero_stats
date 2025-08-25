@@ -16,14 +16,3 @@ def top_playlists_index():
         return render_template('top_playlists.html', playlists=playlists)
     except Exception as e:
         return render_template('top_playlists.html', playlists=[], error=str(e))
-
-@top_playlists.route('/api/data')
-def top_playlists_data():
-    """API endpoint for top playlists data (JSON)"""
-    try:
-        playlists = get_top_playlists()
-        return jsonify({
-            'playlists': [dict(playlist) for playlist in playlists]
-        })
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500 

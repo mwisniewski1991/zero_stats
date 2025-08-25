@@ -37,24 +37,3 @@ def playlists_index():
         return render_template('playlists.html', playlists=playlists)
     except Exception as e:
         return render_template('playlists.html', playlists={}, error=str(e))
-
-@playlists.route('/<playlist_id>')
-def playlist_detail(playlist_id):
-    """Individual playlist detail page"""
-    try:
-        videos = get_playlist_videos(playlist_id)
-        return render_template('playlist_detail.html', playlist_id=playlist_id, videos=videos)
-    except Exception as e:
-        return render_template('playlist_detail.html', playlist_id=playlist_id, videos=[], error=str(e))
-
-@playlists.route('/api/<playlist_id>/data')
-def playlist_data(playlist_id):
-    """API endpoint for playlist data (JSON)"""
-    try:
-        videos = get_playlist_videos(playlist_id)
-        return jsonify({
-            'playlist_id': playlist_id,
-            'videos': [dict(video) for video in videos]
-        })
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500 
