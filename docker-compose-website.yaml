@@ -1,0 +1,26 @@
+services:
+  web:
+    build:
+      context: ./app/website
+      dockerfile: Dockerfile
+    container_name: zero_stats_web
+    restart: unless-stopped
+    ports:
+      - "34576:34576"
+    environment:
+      FLASK_HOST: 0.0.0.0
+      FLASK_PORT: 34576
+    #   FLASK_DEBUG: "True"
+    volumes:
+      - ./app/website/app:/app/app
+    networks:
+      - zero_stats_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:34576/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  zero_stats_network:
+    driver: bridge
