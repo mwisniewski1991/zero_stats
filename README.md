@@ -2,6 +2,7 @@
 
 
 ## 📑 Table of Contents
+- [🎯 Goal](#-goal)
 - [🛠️ Technologies](#️-technologies)
 - [🔄 Process Overview](#-process-overview)
 - [📋 Process Details](#-process-details)
@@ -13,7 +14,7 @@
 
 ## 🎯 Goal   
 - 📥 **collect data from YouTube API**
-- 🗂️ **organize data**
+- 🗂️ **organize and transform data**
 - 📊 **show summary on Dashboard**
 
 
