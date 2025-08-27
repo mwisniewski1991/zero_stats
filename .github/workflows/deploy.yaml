@@ -1,0 +1,25 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches: [ master, main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Deploy to server
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_KEY }}
+        port: ${{ secrets.PORT }}
+        script: |
+          cd ${{ secrets.PROJECT_PATH }}
+          git pull origin master
+          docker-compose -f docker-compose-website.yaml down && docker-compose -f docker-compose-website.yaml up -d --build 
