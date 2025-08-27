@@ -10,13 +10,13 @@ def create_app():
     
     # Configure database from environment variables
     app.config['DB_CONFIG'] = {
-        'host': environ.get('DB_HOST'),
-        'port': environ.get('DB_PORT'),
-        'database': environ.get('DB_NAME'),
-        'user': environ.get('DB_USER'),
-        'password': environ.get('DB_PASSWORD')
+        'host': environ.get('FLASK_DB_HOST'),
+        'port': environ.get('FLASK_DB_PORT'),
+        'database': environ.get('FLASK_DB_NAME'),
+        'user': environ.get('FLASK_DB_USER'),
+        'password': environ.get('FLASK_DB_PASSWORD')
     }
-    app.config['DB_SCHEMA'] = environ.get('DB_SCHEMA')
+    app.config['DB_SCHEMA'] = environ.get('FLASK_DB_SCHEMA')
 
     from .blueprints.playlists.playlists import playlists
     from .blueprints.main.main import main
