@@ -10,6 +10,13 @@
     - [⚙️ Data processing and orchestration](#️-data-processing-and-orchestration)
     - [📊 Dashboard](#-dashboard)
 
+
+## 🎯 Goal   
+- 📥 **collect data from YouTube API**
+- 🗂️ **organize data**
+- 📊 **show summary on Dashboard**
+
+
 ## 🛠️ Technologies
 - **Backend+Frontend:** 🐍 Flask,  🌐 nginx (reverse proxy), 📊 D3.js
 - **Database:** 🐘 PostgreSQL
@@ -62,21 +69,19 @@ dags list:
 
 ### 📊 Dashboard
 
-**Dostępne wizualizacje:**
+**Available visualizations:**
 
-- **📊 Filmy w Playlistach** - Interaktywne wykresy słupkowe dla każdej playlisty pokazujące wyświetlenia poszczególnych filmów.
-  - Tooltipami z dokładnymi wartościami i tytułami filmów
-  - Linią średniej wyświetleń (przerywana)
+- **📊 Videos in Playlists** - Interactive bar charts for each playlist showing views of individual videos.
+  - Tooltips with exact values and video titles
+  - Average views line (dashed)
 
+- **📊 Monthly Playlists** - Bar charts presenting monthly playlist statistics since January 2024:
+  - Total views per month for each playlist
+  - Number of videos in each month
+  - Average views line
 
-- **📊 Playlisty Miesięczne** - Wykresy słupkowe przedstawiające miesięczne statystyki playlist od stycznia 2024:
-  - Suma wyświetleń per miesiąc dla każdej playlisty
-  - Liczba filmów w każdym miesiącu
-  - Linią średniej wyświetleń
+- **🏆 Playlist Ranking** - Interactive DataTables table with:
+  - Statistics: total views, likes, average values
+  - Sorting by total views (default)
 
-- **🏆 Ranking Playlist** - Interaktywna tabela DataTables z:
-  - Statystykami: łączne wyświetlenia, polubienia, średnie wartości
-  - Sortowaniem według łącznych wyświetleń (domyślnie)
-
-**Technologia wizualizacji:** D3.js v7 z responsywnym designem i ciemnym motywem
-
+**Visualization technology:** D3.js v7 with responsive design and dark theme
