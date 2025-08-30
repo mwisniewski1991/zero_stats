@@ -104,7 +104,7 @@ function drawMonthlyAxes(svg, xScale, yScale, dimensions) {
     // X axis without labels - only axis line
     svg.append("g")
         .attr("transform", `translate(0,${dimensions.height})`)
-        .call(d3.axisBottom(xScale).tickSize(3).tickFormat(""));
+        .call(d3.axisBottom(xScale).tickSize(0).tickFormat(""));
     
     // Y axis - fewer ticks and smaller font
     svg.append("g")
@@ -168,7 +168,7 @@ function handleVideoDotHover(element, event, data, tooltip, playlistTitle) {
     tooltip.transition()
         .duration(200)
         .style("opacity", .9);
-    tooltip.html(`${data.video_count} filmów<br/>${data.year_month}`)
+    tooltip.html(`Ilość filmów: ${data.video_count}<br/>${data.year_month}`)
         .style("left", (event.pageX + 10) + "px")
         .style("top", (event.pageY - 28) + "px");
 }
