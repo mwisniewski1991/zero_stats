@@ -18,9 +18,13 @@ function createMonthlyChart(playlistId, monthlyData, playlistTitle) {
     // Create scales
     const { xScale, yScale } = createMonthlyScales(monthlyData, dimensions);
     
+    // Create second Y scale for video count
+    const yScaleVideos = createVideoCountScale(monthlyData, dimensions);
+    
     // Draw chart elements
     drawMonthlyAxes(svg, xScale, yScale, dimensions);
     drawMonthlyBars(svg, monthlyData, xScale, yScale, dimensions, tooltip, playlistTitle);
+    drawVideoCountDots(svg, monthlyData, xScale, yScaleVideos, dimensions, tooltip, playlistTitle);
     drawMonthlyAverageLine(svg, monthlyData, yScale, dimensions);
     drawMonthlyYAxisLabel(svg, dimensions, config);
 }
@@ -78,6 +82,13 @@ function createMonthlyScales(monthlyData, dimensions) {
     return { xScale, yScale };
 }
 
+function createVideoCountScale(monthlyData, dimensions) {
+    const maxVideos = d3.max(monthlyData, d => d.video_count);
+    return d3.scaleLinear()
+        .domain([0, maxVideos])
+        .range([dimensions.height, 0]);
+}
+
 function drawMonthlyAxes(svg, xScale, yScale, dimensions) {
     // Custom formatter for Y axis labels
     function formatYAxisLabel(d) {
@@ -123,15 +134,51 @@ function drawMonthlyBars(svg, monthlyData, xScale, yScale, dimensions, tooltip, 
         });
 }
 
+function drawVideoCountDots(svg, monthlyData, xScale, yScaleVideos, dimensions, tooltip, playlistTitle) {
+    svg.selectAll("video-count-dot")
+        .data(monthlyData)
+        .join("circle")
+        .attr("cx", d => xScale(d.year_month) + xScale.bandwidth() / 2)
+        .attr("cy", d => yScaleVideos(d.video_count))
+        .attr("r", 2)
+        .attr("fill", "#fff")
+        .attr("opacity", 0.75)
+        .on("mouseover", function(event, d) {
+            handleVideoDotHover(this, event, d, tooltip, playlistTitle);
+        })
+        .on("mouseout", function(event, d) {
+            handleVideoDotMouseOut(this, tooltip);
+        });
+}
+
 function handleMonthlyBarHover(element, event, data, tooltip, hoverColor, playlistTitle) {
     d3.select(element).attr("fill", hoverColor).attr("opacity", 0.8);
     
     tooltip.transition()
         .duration(200)
         .style("opacity", .9);
-    tooltip.html(`<strong>${playlistTitle}</strong><br/>${d3.format(",")(data.total_views)} wyświetleń<br/>${data.video_count} filmów`)
+    tooltip.html(`${d3.format(",")(data.total_views)} wyświetleń<br/>${data.year_month}`)
         .style("left", (event.pageX + 10) + "px")
         .style("top", (event.pageY - 28) + "px");
+}
+
+function handleVideoDotHover(element, event, data, tooltip, playlistTitle) {
+    d3.select(element).attr("r", 4).attr("opacity", 1);
+    
+    tooltip.transition()
+        .duration(200)
+        .style("opacity", .9);
+    tooltip.html(`${data.video_count} filmów<br/>${data.year_month}`)
+        .style("left", (event.pageX + 10) + "px")
+        .style("top", (event.pageY - 28) + "px");
+}
+
+function handleVideoDotMouseOut(element, tooltip) {
+    d3.select(element).attr("r", 3).attr("opacity", 0.75);
+    
+    tooltip.transition()
+        .duration(500)
+        .style("opacity", 0);
 }
 
 function handleMonthlyBarMouseOut(element, tooltip, originalColor) {
