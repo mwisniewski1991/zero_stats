@@ -1,8 +1,5 @@
-<div class="col-12">
-    <div class="mb-2">
-        <small class="text-muted">Okres: od stycznia 2024 do bieżącego miesiąca</small>
-    </div>
-    <div id="chart-{{ playlist.id }}" class="chart-container"></div>
+<div class="chart-container-compact">
+    <div id="chart-{{ playlist.id }}" class="chart-wrapper"></div>
 </div>
 <script>
 // D3.js chart creation for monthly playlists data
@@ -30,8 +27,8 @@ function createMonthlyChart(playlistId, monthlyData, playlistTitle) {
 
 function getMonthlyChartConfig() {
     return {
-        margin: {top: 15, right: 30, bottom: 60, left: 90},
-        height: 250,
+        margin: {top: 10, right: 15, bottom: 15, left: 50},
+        height: 150,
         colors: {
             bars: "#f0302e",
             hover: "#fff",
@@ -43,7 +40,7 @@ function getMonthlyChartConfig() {
 
 function calculateMonthlyDimensions(playlistId, config) {
     const container = document.getElementById(`chart-${playlistId}`);
-    const containerWidth = container.offsetWidth - 32;
+    const containerWidth = container.offsetWidth - 16;
     const width = containerWidth - config.margin.left - config.margin.right;
     const height = config.height - config.margin.top - config.margin.bottom;
     
@@ -85,29 +82,25 @@ function drawMonthlyAxes(svg, xScale, yScale, dimensions) {
     // Custom formatter for Y axis labels
     function formatYAxisLabel(d) {
         if (d >= 1000000) {
-            return (d / 1000000).toFixed(1) + 'M';
+            return (d / 1000000).toFixed(0) + 'M';
         } else if (d >= 1000) {
-            return d3.format(",")(d).replace(/,/g, ' ');
+            return (d / 1000).toFixed(0) + 'k';
         } else {
             return d.toString();
         }
     }
     
-    // X axis with month labels
+    // X axis without labels - only axis line
     svg.append("g")
         .attr("transform", `translate(0,${dimensions.height})`)
-        .call(d3.axisBottom(xScale))
-        .selectAll("text")
-        .style("text-anchor", "end")
-        .attr("dx", "-.8em")
-        .attr("dy", ".15em")
-        .attr("transform", "rotate(-45)")
-        .style("opacity", 0.75);
+        .call(d3.axisBottom(xScale).tickSize(3).tickFormat(""));
     
-    // Y axis
+    // Y axis - fewer ticks and smaller font
     svg.append("g")
-        .call(d3.axisLeft(yScale).ticks(5).tickFormat(formatYAxisLabel))
-        .style("opacity", 0.75);
+        .call(d3.axisLeft(yScale).ticks(3).tickFormat(formatYAxisLabel).tickSize(3))
+        .selectAll("text")
+        .style("font-size", "8px")
+        .style("opacity", 0.7);
 }
 
 function drawMonthlyBars(svg, monthlyData, xScale, yScale, dimensions, tooltip, playlistTitle) {
@@ -161,30 +154,40 @@ function drawMonthlyAverageLine(svg, monthlyData, yScale, dimensions) {
         .attr("y2", yScale(averageViews))
         .attr("stroke", config.colors.average)
         .attr("stroke-width", 1)
-        .attr("stroke-dasharray", "10,10")
-        .attr("opacity", 0.8);
+        .attr("stroke-dasharray", "5,5")
+        .attr("opacity", 0.6);
     
-    // Average line label
+    // Average line label - smaller font
     svg.append("text")
-        .attr("x", dimensions.width - 5)
-        .attr("y", yScale(averageViews) - 5)
+        .attr("x", dimensions.width - 2)
+        .attr("y", yScale(averageViews) - 2)
         .attr("text-anchor", "end")
-        .style("font-size", "12px")
+        .style("font-size", "8px")
         .style("fill", config.colors.average)
-        .style("opacity", 0.75)
-        .text(`Średnia: ${d3.format(",")(Math.round(averageViews))}`);
+        .style("opacity", 0.6)
+        .text(`Śr: ${formatCompactNumber(Math.round(averageViews))}`);
+}
+
+function formatCompactNumber(num) {
+    if (num >= 1000000) {
+        return (num / 1000000).toFixed(1) + 'M';
+    } else if (num >= 1000) {
+        return (num / 1000).toFixed(0) + 'k';
+    } else {
+        return num.toString();
+    }
 }
 
 function drawMonthlyYAxisLabel(svg, dimensions, config) {
     svg.append("text")
         .attr("transform", "rotate(-90)")
-        .attr("y", 0 - dimensions.margin.left + 5)
+        .attr("y", 0 - dimensions.margin.left + 10)
         .attr("x", 0 - (dimensions.height / 2))
         .attr("dy", "1em")
         .style("text-anchor", "middle")
-        .style("font-size", "14px")
-        .style("opacity", 0.75)
+        .style("font-size", "10px")
+        .style("opacity", 0.6)
         .style("fill", config.colors.text)
-        .text("Suma wyświetleń");
+        .text("Wyświetlenia");
 }
 </script>
