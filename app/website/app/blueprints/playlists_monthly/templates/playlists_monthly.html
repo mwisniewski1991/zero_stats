@@ -33,14 +33,14 @@
 {% endif %}
 
 {% if playlists %}
-    <div id="playlistsContainer">
+    <div id="playlistsContainer" class="row">
     {% for playlist_id, playlist in playlists.items() %}
-    <div class="card mb-4 playlist-card" data-playlist-title="{{ playlist.title|lower }}">
-        <div class="card-header">
-            <h3 class="card-title mb-0">{{ playlist.title }}</h3>
-        </div>
-        <div class="card-body">
-            <div class="row">
+    <div class="col-12 col-sm-6 col-lg-4 col-xl-2dot4 mb-4 playlist-item" data-playlist-title="{{ playlist.title|lower }}">
+        <div class="card playlist-card-compact">
+            <div class="card-header">
+                <h6 class="card-title mb-0 text-truncate" title="{{ playlist.title }}">{{ playlist.title }}</h6>
+            </div>
+            <div class="card-body p-2">
                 {% include 'utils/monthly_charts.html' %}
             </div>
         </div>
@@ -54,25 +54,25 @@
         const filterInput = document.getElementById('playlistFilter');
         const filterBtn = document.getElementById('filterBtn');
         const clearBtn = document.getElementById('clearBtn');
-        const playlistCards = document.querySelectorAll('.playlist-card');
+        const playlistItems = document.querySelectorAll('.playlist-item');
         
         function filterPlaylists() {
             const searchTerm = filterInput.value.toLowerCase().trim();
             
-            playlistCards.forEach(card => {
-                const playlistTitle = card.getAttribute('data-playlist-title');
+            playlistItems.forEach(item => {
+                const playlistTitle = item.getAttribute('data-playlist-title');
                 if (searchTerm === '' || playlistTitle.includes(searchTerm)) {
-                    card.style.display = 'block';
+                    item.style.display = 'block';
                 } else {
-                    card.style.display = 'none';
+                    item.style.display = 'none';
                 }
             });
         }
         
         function clearFilter() {
             filterInput.value = '';
-            playlistCards.forEach(card => {
-                card.style.display = 'block';
+            playlistItems.forEach(item => {
+                item.style.display = 'block';
             });
         }
         
