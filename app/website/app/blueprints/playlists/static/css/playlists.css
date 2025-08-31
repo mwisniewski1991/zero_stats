@@ -43,6 +43,54 @@
     padding: 0.5rem;
 }
 
+/* Compact chart containers for grid layout */
+.chart-container-compact {
+    background-color: #24262c;
+    border-radius: 0.25rem;
+    padding: 0.25rem;
+    min-height: 120px;
+}
+
+.chart-wrapper {
+    width: 100%;
+    height: 120px;
+}
+
+/* Custom column width for 5 items per row */
+.col-xl-2dot4 {
+    flex: 0 0 auto;
+    width: 20%;
+}
+
+/* Compact playlist cards */
+.playlist-card-compact {
+    background-color: #24262c;
+    border: none;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.3);
+    border-radius: 0.375rem;
+    color: #e0e0e0;
+    height: 100%;
+    transition: opacity 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.playlist-card-compact:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.4);
+}
+
+.playlist-card-compact .card-header {
+    background-color: #24262c;
+    border-bottom: 1px solid #4d4d4d;
+    border-radius: 0.375rem 0.375rem 0 0;
+    padding: 0.5rem;
+}
+
+.playlist-card-compact .card-title {
+    color: #e0e0e0;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
 /* Playlist stats styling */
 .playlist-stats {
     background-color: #3d3d3d;
@@ -78,8 +126,29 @@
 }
 
 /* Responsive chart adjustments */
+@media (max-width: 1200px) {
+    .col-xl-2dot4 {
+        width: 25%; /* 4 per row on large screens */
+    }
+}
+
+@media (max-width: 992px) {
+    .chart-container-compact {
+        min-height: 150px;
+    }
+    .chart-wrapper {
+        height: 150px;
+    }
+}
+
 @media (max-width: 768px) {
     .chart-container {
         min-height: 300px;
+    }
+    .chart-container-compact {
+        min-height: 180px;
+    }
+    .chart-wrapper {
+        height: 180px;
     }
 }

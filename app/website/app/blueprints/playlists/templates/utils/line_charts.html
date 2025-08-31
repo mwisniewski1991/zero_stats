@@ -1,8 +1,8 @@
-<div class="col-12">
-    <div class="mb-2">
-        <small class="text-muted">Liczba filmów: {{ playlist.videos|length }}</small>
+<div class="chart-container-compact">
+    <div class="mb-1">
+        <small class="text-muted">Filmów: {{ playlist.videos|length }}</small>
     </div>
-    <div id="chart-{{ playlist.id }}" class="chart-container"></div>
+    <div id="chart-{{ playlist.id }}" class="chart-wrapper"></div>
 </div>
 <script>
 // D3.js chart creation for playlists
@@ -30,8 +30,8 @@ function createPlaylistChart(playlistId, videos) {
 
 function getChartConfig() {
     return {
-        margin: {top: 15, right: 30, bottom: 40, left: 90},
-        height: 200,
+        margin: {top: 10, right: 15, bottom: 15, left: 50},
+        height: 120,
         colors: {
             bars: "#f0302e",
             hover: "#fff",
@@ -43,7 +43,7 @@ function getChartConfig() {
 
 function calculateDimensions(playlistId, config) {
     const container = document.getElementById(`chart-${playlistId}`);
-    const containerWidth = container.offsetWidth - 32;
+    const containerWidth = container.offsetWidth - 16;
     const width = containerWidth - config.margin.left - config.margin.right;
     const height = config.height - config.margin.top - config.margin.bottom;
     
@@ -51,27 +51,20 @@ function calculateDimensions(playlistId, config) {
 }
 
 function setupChart(playlistId, dimensions) {
-    // Clear previous content
     d3.select(`#chart-${playlistId}`).html('');
     
-    const svg = createSVG(playlistId, dimensions);
-    
-    return svg ;
-}
-
-function createTooltip() {
-    return d3.select("body").append("div")
-        .attr("class", "chart-tooltip")
-        .style("opacity", 0);
-}
-
-function createSVG(playlistId, dimensions) {
     return d3.select(`#chart-${playlistId}`)
         .append("svg")
         .attr("width", dimensions.width + dimensions.margin.left + dimensions.margin.right)
         .attr("height", dimensions.height + dimensions.margin.top + dimensions.margin.bottom)
         .append("g")
         .attr("transform", `translate(${dimensions.margin.left},${dimensions.margin.top})`);
+}
+
+function createTooltip() {
+    return d3.select("body").append("div")
+        .attr("class", "chart-tooltip")
+        .style("opacity", 0);
 }
 
 function createScales(videos, dimensions) {
@@ -91,24 +84,26 @@ function drawAxes(svg, xScale, yScale, dimensions) {
     // Custom formatter for Y axis labels
     function formatYAxisLabel(d) {
         if (d >= 1000000) {
-            return (d / 1000000).toFixed(1) + 'M';
+            return (d / 1000000).toFixed(0) + 'M';
         } else if (d >= 1000) {
-            return d3.format(",")(d).replace(/,/g, ' ');
+            return (d / 1000).toFixed(0) + 'k';
         } else {
             return d.toString();
         }
     }
     
-    // X axis (without labels)
+    // X axis without labels and ticks
     svg.append("g")
         .attr("transform", `translate(0,${dimensions.height})`)
         .call(d3.axisBottom(xScale).tickFormat('').tickSize(0))
-        .style("opacity", 0.75);
+        .style("opacity", 0.7);
     
-    // Y axis
+    // Y axis - fewer ticks and smaller font
     svg.append("g")
-        .call(d3.axisLeft(yScale).ticks(5).tickFormat(formatYAxisLabel))
-        .style("opacity", 0.75);
+        .call(d3.axisLeft(yScale).ticks(3).tickFormat(formatYAxisLabel).tickSize(3))
+        .selectAll("text")
+        .style("font-size", "8px")
+        .style("opacity", 0.7);
 }
 
 function drawBars(svg, videos, xScale, yScale, dimensions, tooltip) {
@@ -162,29 +157,39 @@ function drawAverageLine(svg, videos, yScale, dimensions) {
         .attr("y2", yScale(averageViews))
         .attr("stroke", config.colors.average)
         .attr("stroke-width", 1)
-        .attr("stroke-dasharray", "10,10")
-        .attr("opacity", 0.8);
+        .attr("stroke-dasharray", "5,5")
+        .attr("opacity", 0.6);
     
-    // Average line label
+    // Average line label - smaller font
     svg.append("text")
-        .attr("x", dimensions.width - 5)
-        .attr("y", yScale(averageViews) - 5)
+        .attr("x", dimensions.width - 2)
+        .attr("y", yScale(averageViews) - 2)
         .attr("text-anchor", "end")
-        .style("font-size", "12px")
+        .style("font-size", "8px")
         .style("fill", config.colors.average)
-        .style("opacity", 0.75)
-        .text(`Średnia: ${d3.format(",")(Math.round(averageViews))}`);
+        .style("opacity", 0.6)
+        .text(`Śr: ${formatCompactNumber(Math.round(averageViews))}`);
+}
+
+function formatCompactNumber(num) {
+    if (num >= 1000000) {
+        return (num / 1000000).toFixed(1) + 'M';
+    } else if (num >= 1000) {
+        return (num / 1000).toFixed(0) + 'k';
+    } else {
+        return num.toString();
+    }
 }
 
 function drawYAxisLabel(svg, dimensions, config) {
     svg.append("text")
         .attr("transform", "rotate(-90)")
-        .attr("y", 0 - dimensions.margin.left + 5)
+        .attr("y", 0 - dimensions.margin.left + 10)
         .attr("x", 0 - (dimensions.height / 2))
         .attr("dy", "1em")
         .style("text-anchor", "middle")
-        .style("font-size", "14px")
-        .style("opacity", 0.75)
+        .style("font-size", "10px")
+        .style("opacity", 0.6)
         .style("fill", config.colors.text)
         .text("Wyświetlenia");
 }
