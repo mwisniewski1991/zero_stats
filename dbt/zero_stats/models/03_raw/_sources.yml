@@ -1,0 +1,24 @@
+version: 2
+
+sources:
+  - name: zero_stats
+    description: "Source tables from zero_stats schema"
+    schema: zero_stats
+    tables:
+      - name: yt_movies
+        description: "Raw YouTube movies data with video statistics"
+        columns:
+          - name: video_id
+            description: "Unique YouTube video ID"
+          - name: title
+            description: "Video title"
+          - name: playlist_id
+            description: "Playlist ID"
+          - name: playlist_title
+            description: "Playlist title"
+          - name: view_count
+            description: "Number of views"
+          - name: like_count
+            description: "Number of likes"
+          - name: published_at
+            description: "Publication date"

@@ -1,0 +1,23 @@
+name: 'zero_stats'
+version: '1.0.0'
+config-version: 2
+
+profile: 'zero_stats'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  zero_stats:
+    marts:
+      +materialized: table
+      +schema: zero_stats
