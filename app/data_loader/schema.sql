@@ -1,5 +1,5 @@
 -- Schema for YouTube movies data
-CREATE TABLE IF NOT EXISTS zero_stats.yt_movies (
+CREATE TABLE IF NOT EXISTS zero_stats."03_bronze_yt_movies" (
     id SERIAL PRIMARY KEY,
     video_id VARCHAR(20) UNIQUE NOT NULL,
     title VARCHAR(500) NOT NULL,
@@ -13,9 +13,9 @@ CREATE TABLE IF NOT EXISTS zero_stats.yt_movies (
 );
 
 -- Index for faster lookups
-CREATE INDEX IF NOT EXISTS idx_yt_movies_video_id ON zero_stats.yt_movies(video_id);
-CREATE INDEX IF NOT EXISTS idx_yt_movies_playlist_id ON zero_stats.yt_movies(playlist_id);
-CREATE INDEX IF NOT EXISTS idx_yt_movies_published_at ON zero_stats.yt_movies(published_at);
+CREATE INDEX IF NOT EXISTS idx_03_bronze_yt_movies_video_id ON zero_stats."03_bronze_yt_movies"(video_id);
+CREATE INDEX IF NOT EXISTS idx_03_bronze_yt_movies_playlist_id ON zero_stats."03_bronze_yt_movies"(playlist_id);
+CREATE INDEX IF NOT EXISTS idx_03_bronze_yt_movies_published_at ON zero_stats."03_bronze_yt_movies"(published_at);
 
 -- Trigger to update updated_at timestamp
 CREATE OR REPLACE FUNCTION update_updated_at_column()
@@ -26,7 +26,7 @@ BEGIN
 END;
 $$ language 'plpgsql';
 
-CREATE TRIGGER update_yt_movies_updated_at 
-    BEFORE UPDATE ON zero_stats.yt_movies 
+CREATE TRIGGER update_03_bronze_yt_movies_updated_at 
+    BEFORE UPDATE ON zero_stats."03_bronze_yt_movies" 
     FOR EACH ROW 
     EXECUTE FUNCTION update_updated_at_column(); 
