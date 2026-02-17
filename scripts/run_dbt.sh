@@ -10,11 +10,11 @@ if [[ ! -f "$ENV_FILE" ]]; then
   exit 1
 fi
 
-docker build -f app/data_loader/Dockerfile -t zero-stats-data-loader app/data_loader
+docker build -f dbt/zero_stats/Dockerfile -t zero-stats-dbt .
 
 docker run --rm \
   --add-host=host.docker.internal:host-gateway \
   --env-file "$ENV_FILE" \
-  zero-stats-data-loader
+  zero-stats-dbt "$@"
 
 exit $?
