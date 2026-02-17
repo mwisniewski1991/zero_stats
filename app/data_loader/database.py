@@ -4,6 +4,9 @@ from typing import List, Dict, Optional
 import logging
 from .config import DB_CONFIG, DB_SCHEMA, DB_TABLE
 
+# Quoted identifier for tables/schemas that start with digits (e.g. 03_bronze_yt_movies)
+QUALIFIED_TABLE = f'"{DB_SCHEMA}"."{DB_TABLE}"'
+
 logger = logging.getLogger(__name__)
 
 class DatabaseManager:
@@ -59,14 +62,14 @@ class DatabaseManager:
             
     def video_exists(self, video_id: str) -> bool:
         """Sprawdza czy film już istnieje w bazie"""
-        query = f"SELECT 1 FROM {DB_SCHEMA}.{DB_TABLE} WHERE video_id = %s"
+        query = f"SELECT 1 FROM {QUALIFIED_TABLE} WHERE video_id = %s"
         result = self.fetch_one(query, (video_id,))
         return result is not None
         
     def insert_video(self, video_data: Dict):
         """Dodaje nowy film do bazy danych"""
         query = f"""
-        INSERT INTO {DB_SCHEMA}.{DB_TABLE} (video_id, title, playlist_id, playlist_title, 
+        INSERT INTO {QUALIFIED_TABLE} (video_id, title, playlist_id, playlist_title, 
                               view_count, like_count, published_at)
         VALUES (%s, %s, %s, %s, %s, %s, %s)
         """
@@ -85,7 +88,7 @@ class DatabaseManager:
     def update_video_stats(self, video_id: str, view_count: int, like_count: int):
         """Aktualizuje statystyki filmu"""
         query = f"""
-        UPDATE {DB_SCHEMA}.{DB_TABLE} 
+        UPDATE {QUALIFIED_TABLE} 
         SET view_count = %s, like_count = %s 
         WHERE video_id = %s
         """
@@ -94,22 +97,22 @@ class DatabaseManager:
         
     def get_all_videos(self) -> List[Dict]:
         """Pobiera wszystkie filmy z bazy"""
-        query = f"SELECT * FROM {DB_SCHEMA}.{DB_TABLE} ORDER BY published_at DESC"
+        query = f"SELECT * FROM {QUALIFIED_TABLE} ORDER BY published_at DESC"
         return self.fetch_all(query)
         
     def get_videos_by_playlist(self, playlist_id: str) -> List[Dict]:
         """Pobiera filmy z konkretnej playlisty"""
-        query = f"SELECT * FROM {DB_SCHEMA}.{DB_TABLE} WHERE playlist_id = %s ORDER BY published_at DESC"
+        query = f"SELECT * FROM {QUALIFIED_TABLE} WHERE playlist_id = %s ORDER BY published_at DESC"
         return self.fetch_all(query, (playlist_id,)) 
 
     def playlist_exists(self, playlist_id: str) -> bool:
         """Sprawdza czy playlista już istnieje w bazie"""
-        query = f"SELECT 1 FROM {DB_SCHEMA}.{DB_TABLE} WHERE playlist_id = %s LIMIT 1"
+        query = f"SELECT 1 FROM {QUALIFIED_TABLE} WHERE playlist_id = %s LIMIT 1"
         result = self.fetch_one(query, (playlist_id,))
         return result is not None
         
     def get_existing_playlists(self) -> List[str]:
         """Pobiera listę ID wszystkich playlist w bazie"""
-        query = f"SELECT DISTINCT playlist_id FROM {DB_SCHEMA}.{DB_TABLE}"
+        query = f"SELECT DISTINCT playlist_id FROM {QUALIFIED_TABLE}"
         results = self.fetch_all(query)
         return [row['playlist_id'] for row in results] 
