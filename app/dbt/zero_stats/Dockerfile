@@ -4,7 +4,7 @@ WORKDIR /app
 
 RUN pip install --no-cache-dir dbt-postgres
 
-COPY dbt/zero_stats /app
+COPY app/dbt/zero_stats /app
 RUN chmod +x /app/entrypoint.sh
 
 ENTRYPOINT ["/app/entrypoint.sh"]

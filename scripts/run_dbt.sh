@@ -10,7 +10,7 @@ if [[ ! -f "$ENV_FILE" ]]; then
   exit 1
 fi
 
-docker build -f dbt/zero_stats/Dockerfile -t zero-stats-dbt .
+docker build -f app/dbt/zero_stats/Dockerfile -t zero-stats-dbt .
 
 docker run --rm \
   --add-host=host.docker.internal:host-gateway \
