@@ -13,8 +13,12 @@ DB_CONFIG = {
 }
 
 # Schema configuration
-DB_SCHEMA = os.getenv('DB_SCHEMA', 'zero_stats')
-DB_TABLE = os.getenv('DB_TABLE', 'yt_movies')
+DB_SCHEMA = os.getenv('DB_SCHEMA')
+if not DB_SCHEMA:
+    raise ValueError("DB_SCHEMA must be set (e.g. in .env)")
+DB_TABLE = os.getenv('DB_TABLE')
+if not DB_TABLE:
+    raise ValueError("DB_TABLE must be set (e.g. in .env)")
 
 # YouTube API configuration
 YOUTUBE_API_KEY = os.getenv('YOUTUBE_API_KEY')
