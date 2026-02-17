@@ -18,6 +18,6 @@ clean-targets:
 
 models:
   zero_stats:
-    marts:
+    01_gold:
       +materialized: table
       +schema: zero_stats
